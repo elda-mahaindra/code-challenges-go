@@ -69,28 +69,6 @@ func isValid(h, n int) error {
 	}
 }
 
-/*
-
-const solution = (h: number, n: number) => {
-  isValid(h, n);
-
-  let asciiForest: string[] = [];
-
-  for (let i = 0; i < h; i++) {
-    let parts: string[] = [];
-
-    for (let j = 0; j < n; j++) {
-      parts = [...parts, ...treePart(h, i, true), ...treePart(h, i, false)];
-    }
-
-    asciiForest = [...asciiForest, parts.join("")];
-  }
-
-  return asciiForest;
-};
-
-*/
-
 func treePart(treeHeight, partOrder int, firstHalf bool) []string {
 	part := make([]string, treeHeight)
 
