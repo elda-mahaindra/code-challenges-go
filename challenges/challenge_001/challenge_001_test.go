@@ -1,11 +1,11 @@
-package challenges_001_test
+package challenge_001_test
 
 import (
 	"errors"
 	"fmt"
 	"testing"
 
-	challenge "code-challenges-go/challenges/challenges_001"
+	challenge "code-challenges-go/challenges/challenge_001"
 
 	"github.com/stretchr/testify/require"
 )

@@ -18,7 +18,7 @@
    source: turing
 */
 
-package challenges_001
+package challenge_001
 
 import (
 	"errors"
