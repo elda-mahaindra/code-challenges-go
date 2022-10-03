@@ -38,7 +38,6 @@ type status struct {
 }
 
 func isValid(s string) error {
-
 	switch {
 	case len(s) < 1 || len(s) > 100:
 		return errors.New(OUT_OF_RANGE_S)
