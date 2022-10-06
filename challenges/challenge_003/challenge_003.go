@@ -51,6 +51,8 @@ package challenge_003
 import (
 	"errors"
 	"strings"
+
+	"code-challenges-go/utils"
 )
 
 const (
@@ -70,23 +72,23 @@ func isValid(h, n int) error {
 }
 
 func treePart(treeHeight, partOrder int, firstHalf bool) []string {
-	part := make([]string, treeHeight)
+	basePart := make([]string, treeHeight)
 
-	for i := 0; i < len(part); i++ {
+	part := utils.Map(basePart, func(p string, i int, basePart []string) string {
 		if firstHalf {
 			if i == treeHeight-partOrder-1 {
-				part[i] = "/"
-			} else {
-				part[i] = "."
+				return "/"
 			}
-		} else {
-			if i == partOrder {
-				part[i] = "\\"
-			} else {
-				part[i] = "."
-			}
+
+			return "."
 		}
-	}
+
+		if i == partOrder {
+			return "\\"
+		}
+
+		return "."
+	})
 
 	return part
 }

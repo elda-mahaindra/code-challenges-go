@@ -167,13 +167,12 @@ func Solution(N int, playerSigns []string) (string, error) {
 		return "", err
 	}
 
-	players := []player{}
-	for _, playerSign := range playerSigns {
+	players := utils.Map(playerSigns, func(playerSign string, i int, playerSigns []string) player {
 		splitted := strings.Split(playerSign, " ")
 		sign := splitted[1]
 		playerNumber, err := strconv.Atoi(splitted[0])
 		if err != nil {
-			return "", err
+			return player{}
 		}
 
 		player := player{
@@ -192,8 +191,8 @@ func Solution(N int, playerSigns []string) (string, error) {
 			winRecords: []int{},
 		}
 
-		players = append(players, player)
-	}
+		return player
+	})
 
 	for len(players) > 1 {
 		winners := []player{}

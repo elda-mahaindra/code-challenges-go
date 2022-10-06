@@ -74,22 +74,15 @@ func isValid(w, h int, lines []string) error {
 		return errors.New(OUT_OF_RANGE_H)
 	case len(lines) != h:
 		return errors.New(INVALID_LINES)
-	case !func(lines []string) bool {
-		valid := true
+	case !utils.Reduce(lines, true, func(valid bool, line string, i int, lines []string) bool {
+		splitted := strings.Split(line, "")
 
-		for _, line := range lines {
-			validContent := true
+		validContent := utils.Reduce(splitted, true, func(validContent bool, content string, i int, splitted []string) bool {
+			return validContent && (content == "." || content == "x")
+		})
 
-			splitted := strings.Split(line, "")
-			for _, content := range splitted {
-				validContent = validContent && (content == "." || content == "x")
-			}
-
-			valid = valid && len(line) == w && validContent
-		}
-
-		return valid
-	}(lines):
+		return valid && len(line) == w && validContent
+	}):
 		return errors.New(INVALID_LINE)
 	default:
 		return nil

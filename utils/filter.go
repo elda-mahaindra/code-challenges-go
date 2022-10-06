@@ -1,6 +1,6 @@
 package utils
 
-func Filter[T comparable](slice []T, filter func(T) bool) []T {
+func Filter[T any](slice []T, filter func(T) bool) []T {
 	filtered := []T{}
 
 	for _, v := range slice {

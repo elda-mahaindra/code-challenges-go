@@ -91,22 +91,15 @@ type firePoint struct {
 
 func isValid(forest []string) error {
 	switch {
-	case len(forest) != 6 || !func(forest []string) bool {
-		valid := true
+	case len(forest) != 6 || !utils.Reduce(forest, true, func(valid bool, forestLine string, i int, forest []string) bool {
+		splitted := strings.Split(forestLine, "")
 
-		for _, forestLine := range forest {
-			splitted := strings.Split(forestLine, "")
+		validContent := utils.Reduce(splitted, true, func(validContent bool, content string, i int, splitted []string) bool {
+			return validContent && (content == "#" || content == "=" || content == "o" || content == "*")
+		})
 
-			validContent := true
-			for _, content := range splitted {
-				validContent = validContent && (content == "#" || content == "=" || content == "o" || content == "*")
-			}
-
-			valid = valid && len(forestLine) == 6 && validContent
-		}
-
-		return valid
-	}(forest):
+		return valid && len(forestLine) == 6 && validContent
+	}):
 		return errors.New(INVALID_FOREST)
 	default:
 		return nil
@@ -160,17 +153,11 @@ func Solution(forest []string) (string, error) {
 		resultForest = append(resultForest, resultLine)
 	}
 
-	anyTreesRemain := func(resultForest []string) bool {
-		anyTreesRemain := false
+	anyTreesRemain := utils.Reduce(resultForest, false, func(anyTreesRemain bool, forestLine string, i int, resultForest []string) bool {
+		splitted := strings.Split(forestLine, "")
 
-		for _, forestLine := range resultForest {
-			splitted := strings.Split(forestLine, "")
-
-			anyTreesRemain = anyTreesRemain || utils.Includes(splitted, "#")
-		}
-
-		return anyTreesRemain
-	}(resultForest)
+		return anyTreesRemain || utils.Includes(splitted, "#")
+	})
 
 	if anyTreesRemain {
 		return strconv.Itoa(removedTress), nil

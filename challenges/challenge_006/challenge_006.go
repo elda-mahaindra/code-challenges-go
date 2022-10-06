@@ -36,6 +36,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"code-challenges-go/utils"
 )
 
 const (
@@ -87,24 +89,24 @@ func Solution(N int, inputs string) (int, error) {
 		return -274, nil
 	}
 
-	lowestTemps := []int{}
-	for i, temp := range temps {
+	lowestTemps := utils.Reduce(temps, []int{}, func(lowestTemps []int, temp int, i int, temps []int) []int {
 		if i == 0 {
-			lowestTemps = append(lowestTemps, temp)
-			continue
+			return append(lowestTemps, temp)
 		}
 
 		diff1 := difference(0, temp)
 		diff2 := difference(0, lowestTemps[0])
 
-		if diff1 < diff2 {
-			lowestTemps = []int{temp}
+		if diff1 > diff2 {
+			return lowestTemps
 		}
 
-		if diff1 == diff2 {
-			lowestTemps = append(lowestTemps, temp)
+		if diff1 < diff2 {
+			return []int{temp}
 		}
-	}
+
+		return append(lowestTemps, temp)
+	})
 
 	sort.SliceStable(lowestTemps, func(i, j int) bool {
 		return lowestTemps[i] > lowestTemps[j]

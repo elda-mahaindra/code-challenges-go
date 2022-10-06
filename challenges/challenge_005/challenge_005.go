@@ -69,6 +69,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"code-challenges-go/utils"
 )
 
 const (
@@ -111,67 +113,49 @@ func Solution(T string) ([]string, error) {
 	inputs := func(T string) []string {
 		upperCased := strings.ToUpper(T)
 		splitted := strings.Split(upperCased, "")
-		mapped := func(splitted []string) []string {
-			mapped := []string{}
-			for _, letter := range splitted {
-				if regex.MatchString(letter) {
-					mapped = append(mapped, letter)
-				} else {
-					mapped = append(mapped, "?")
-				}
-			}
 
-			return mapped
-		}(splitted)
+		mapped := utils.Map(splitted, func(letter string, i int, splitted []string) string {
+			if regex.MatchString(letter) {
+				return letter
+			} else {
+				return "?"
+			}
+		})
 
 		return mapped
 	}(T)
 
-	reducedRows := func(rows []string) [][]string {
-		reducedRows := [][]string{}
+	reducedRows := utils.Reduce(rows, [][]string{}, func(reducedRows [][]string, row string, i int, rows []string) [][]string {
+		reducedRow := []string{}
 
-		for _, row := range rows {
-			reducedRow := []string{}
+		for i := 0; i < totalCharsAvailable; i++ {
+			sliced := row[i*L : i*L+L]
 
-			for i := 0; i < totalCharsAvailable; i++ {
-				sliced := row[i*L : i*L+L]
-
-				reducedRow = append(reducedRow, sliced)
-			}
-
-			reducedRows = append(reducedRows, reducedRow)
+			reducedRow = append(reducedRow, sliced)
 		}
 
-		return reducedRows
-	}(rows)
+		return append(reducedRows, reducedRow)
+	})
 
-	tIndexes := func(inputs []string) []int {
-		tIndexes := []int{}
+	tIndexes := utils.Reduce(inputs, []int{}, func(tIndexes []int, tChar string, i int, inputs []string) []int {
+		for i := 0; i < len(charsAvailable); i++ {
+			char := string([]rune(charsAvailable)[i])
 
-		for _, tChar := range inputs {
-			for i := 0; i < len(charsAvailable); i++ {
-				char := string([]rune(charsAvailable)[i])
-
-				if char == tChar {
-					tIndexes = append(tIndexes, i)
-				}
+			if char == tChar {
+				tIndexes = append(tIndexes, i)
 			}
 		}
 
 		return tIndexes
-	}(inputs)
+	})
 
 	result := []string{}
 	for i := 0; i < H; i++ {
-		tHArt := func(tIndexes []int) string {
-			tHArt := ""
+		tHArt := utils.Reduce(tIndexes, "", func(tHArt string, tIndex int, j int, tIndexes []int) string {
+			tA := fmt.Sprintf("%s%s", tHArt, reducedRows[i][tIndex])
 
-			for _, tIndex := range tIndexes {
-				tHArt = fmt.Sprintf("%s%s", tHArt, reducedRows[i][tIndex])
-			}
-
-			return tHArt
-		}(tIndexes)
+			return tA
+		})
 
 		result = append(result, tHArt)
 	}

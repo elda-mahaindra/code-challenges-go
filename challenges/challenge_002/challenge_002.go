@@ -42,6 +42,8 @@ package challenge_002
 import (
 	"errors"
 	"sort"
+
+	"code-challenges-go/utils"
 )
 
 const (
@@ -53,10 +55,9 @@ const boardSideLength = 9
 
 func isValid(board [][]int) error {
 	checkValidDimension := func(board [][]int, expectedXLength, expectedYLength int) bool {
-		validXLength := true
-		for i := 0; i < len(board); i++ {
-			validXLength = validXLength && len(board[i]) == expectedXLength
-		}
+		validXLength := utils.Reduce(board, true, func(valid bool, row []int, i int, board [][]int) bool {
+			return valid && len(row) == expectedXLength
+		})
 
 		validYLength := len(board) == expectedYLength
 
@@ -68,15 +69,13 @@ func isValid(board [][]int) error {
 			return false
 		}
 
-		valid := true
-		for j := 0; j < len(board); j++ {
-			currentRow := board[j]
+		valid := utils.Reduce(board, true, func(valid bool, row []int, i int, board [][]int) bool {
+			validRow := utils.Reduce(row, true, func(valid bool, n int, i int, row []int) bool {
+				return valid && n >= start && n <= end
+			})
 
-			for i := 0; i < len(currentRow); i++ {
-				n := board[j][i]
-				valid = valid && n >= start && n <= end
-			}
-		}
+			return valid && validRow
+		})
 
 		return valid
 	}
@@ -97,33 +96,23 @@ func checkDuplication(numbers []int) bool {
 
 	sort.Ints(numbersToBeChecked)
 
-	duplication := false
-	for i := 0; i < len(numbersToBeChecked); i++ {
+	duplication := utils.Reduce(numbersToBeChecked, false, func(duplication bool, n int, i int, numbersToBeChecked []int) bool {
 		if i == 0 {
-			continue
+			return duplication
 		}
 
-		duplication = duplication || numbersToBeChecked[i] == numbersToBeChecked[i-1]
-	}
+		return duplication || n == numbersToBeChecked[i-1]
+	})
 
 	return duplication
 }
 
 func transpose(matrix [][]int) [][]int {
-	lengthX := len(matrix[0])
-	lengthY := len(matrix)
-
-	transposed := make([][]int, lengthX)
-	for i := range transposed {
-		transposed[i] = make([]int, lengthY)
-	}
-
-	for i := 0; i < lengthX; i++ {
-		for j := 0; j < lengthY; j++ {
-			transposed[i][j] = matrix[j][i]
-		}
-	}
-	return transposed
+	return utils.Map(matrix[0], func(n int, i int, slice []int) []int {
+		return utils.Map(matrix, func(row []int, j int, slice [][]int) int {
+			return row[i]
+		})
+	})
 }
 
 // transform 9x9 board to 3x3 board represented by each row of the transformation result
@@ -137,15 +126,9 @@ func transform(board [][]int, boardSideLength, sideLength int) [][]int {
 		for j := 0; j < boardSideLength/sideLength; j++ {
 			sliced := transposed[3*j : 3+3*j]
 			// reduced is the 3x3 board
-			reduced := func(sliced [][]int) []int {
-				reduced := []int{}
-
-				for k := 0; k < len(sliced); k++ {
-					reduced = append(reduced, sliced[k]...)
-				}
-
-				return reduced
-			}(sliced)
+			reduced := utils.Reduce(sliced, []int{}, func(reduced []int, numbers []int, i int, sliced [][]int) []int {
+				return append(reduced, numbers...)
+			})
 
 			sort.Ints(reduced)
 
@@ -162,35 +145,17 @@ func Solution(board [][]int) (string, error) {
 		return "", err
 	}
 
-	duplicationInRow := func(board [][]int) bool {
-		duplicationInRow := false
+	duplicationInRow := utils.Reduce(board, false, func(duplicationInRow bool, row []int, i int, board [][]int) bool {
+		return duplicationInRow || checkDuplication(row)
+	})
 
-		for i := 0; i < len(board); i++ {
-			duplicationInRow = duplicationInRow || checkDuplication(board[i])
-		}
+	duplicationInColumn := utils.Reduce(transpose(board), false, func(duplicationInColumn bool, column []int, i int, transposedBoard [][]int) bool {
+		return duplicationInColumn || checkDuplication(column)
+	})
 
-		return duplicationInRow
-	}(board)
-
-	duplicationInColumn := func(board [][]int) bool {
-		duplicationInColumn := false
-
-		for i := 0; i < len(board); i++ {
-			duplicationInRow = duplicationInRow || checkDuplication(board[i])
-		}
-
-		return duplicationInColumn
-	}(transpose(board))
-
-	duplicationInSmallBoard := func(board [][]int) bool {
-		duplicationInSmallBoard := false
-
-		for i := 0; i < len(board); i++ {
-			duplicationInRow = duplicationInRow || checkDuplication(board[i])
-		}
-
-		return duplicationInSmallBoard
-	}(transform(board, boardSideLength, 3))
+	duplicationInSmallBoard := utils.Reduce(transform(board, boardSideLength, 3), false, func(duplicationInSmallBoard bool, smallBoard []int, i int, transformedBoard [][]int) bool {
+		return duplicationInSmallBoard || checkDuplication(smallBoard)
+	})
 
 	if duplicationInRow || duplicationInColumn || duplicationInSmallBoard {
 		return "not valid", nil

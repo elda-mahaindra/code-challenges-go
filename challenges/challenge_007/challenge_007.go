@@ -30,6 +30,8 @@ import (
 	"errors"
 	"math"
 	"sort"
+
+	"code-challenges-go/utils"
 )
 
 const (
@@ -44,15 +46,9 @@ func isValid(N int, powers []int) error {
 		return errors.New(OUT_OF_RANGE_N)
 	case len(powers) != N:
 		return errors.New(INVALID_POWERS)
-	case func(powers []int) bool {
-		invalid := false
-
-		for _, power := range powers {
-			invalid = invalid || power <= 0 || power > 10000000
-		}
-
-		return invalid
-	}(powers):
+	case utils.Reduce(powers, false, func(invalid bool, power int, i int, powers []int) bool {
+		return invalid || power <= 0 || power > 10000000
+	}):
 		return errors.New(OUT_OF_RANGE_P)
 	default:
 		return nil
@@ -71,23 +67,19 @@ func Solution(N int, powers []int) (int, error) {
 
 	sort.Ints(powers)
 
-	closestDiff := func(powers []int) int {
-		closestDiff := 10000000
+	closestDiff := utils.Reduce(powers, 10000000, func(closestDiff int, power int, i int, powers []int) int {
+		if i == 0 {
+			return closestDiff
+		}
 
-		for i, power := range powers {
-			if i == 0 {
-				continue
-			}
+		diff := difference(power, powers[i-1])
 
-			diff := difference(power, powers[i-1])
-
-			if diff < closestDiff {
-				closestDiff = diff
-			}
+		if diff < closestDiff {
+			return diff
 		}
 
 		return closestDiff
-	}(powers)
+	})
 
 	return closestDiff, nil
 }

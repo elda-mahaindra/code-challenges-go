@@ -25,6 +25,8 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+
+	"code-challenges-go/utils"
 )
 
 const (
@@ -38,24 +40,22 @@ type status struct {
 }
 
 func isValid(s string) error {
+	splitted := strings.Split(s, "")
+
 	switch {
 	case len(s) < 1 || len(s) > 100:
 		return errors.New(OUT_OF_RANGE_S)
-	case !func(s string) bool {
-		splitted := strings.Split(s, "")
-
-		containAlphabet := false
-		for _, letter := range splitted {
-			regex, err := regexp.Compile("[a-zA-Z]")
-			if err != nil {
-				containAlphabet = containAlphabet && false
-			}
-
-			containAlphabet = containAlphabet || regex.MatchString(letter)
+	// ensure there is at least one alphabet letter in the input string
+	case !utils.Reduce(splitted, false, func(valid bool, letter string, i int, splitted []string) bool {
+		regex, err := regexp.Compile("[a-zA-Z]")
+		if err != nil {
+			valid = valid && false
 		}
 
-		return containAlphabet
-	}(s):
+		valid = valid || regex.MatchString(letter)
+
+		return valid
+	}):
 		return errors.New(ALPHABET_NOT_FOUND)
 	default:
 		return nil
@@ -71,19 +71,18 @@ func Solution(s string) (string, error) {
 	splitted := strings.Split(s, "")
 	sort.Strings(splitted)
 
-	statuses := []status{}
-	for i := 0; i < len(splitted); i++ {
-		regex, err := regexp.Compile("[a-zA-Z]")
-		if err != nil {
-			continue
-		}
+	regex, err := regexp.Compile("[a-zA-Z]")
+	if err != nil {
+		return "", err
+	}
 
+	statuses := utils.Reduce(splitted, []status{}, func(statuses []status, v string, i int, splitted []string) []status {
 		if !regex.MatchString(splitted[i]) {
-			continue
+			return statuses
 		}
 
 		if len(statuses) == 0 {
-			statuses = append(statuses, status{
+			return append(statuses, status{
 				char:      splitted[i],
 				occurence: 1,
 			})
@@ -91,18 +90,18 @@ func Solution(s string) (string, error) {
 			latest := statuses[len(statuses)-1]
 			if splitted[i] == latest.char {
 				statuses = statuses[0 : len(statuses)-1]
-				statuses = append(statuses, status{
+				return append(statuses, status{
 					char:      splitted[i],
 					occurence: latest.occurence + 1,
 				})
 			} else {
-				statuses = append(statuses, status{
+				return append(statuses, status{
 					char:      splitted[i],
 					occurence: 1,
 				})
 			}
 		}
-	}
+	})
 
 	sort.SliceStable(statuses, func(i, j int) bool {
 		return statuses[i].occurence > statuses[j].occurence

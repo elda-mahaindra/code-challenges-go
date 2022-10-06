@@ -64,52 +64,36 @@ func isValid(mimeTypes, fileNames []string) error {
 		return errors.New(OUT_OF_RANGE_MIME_TYPES)
 	case len(fileNames) <= 0 || len(fileNames) >= 10000:
 		return errors.New(OUT_OF_RANGE_FILE_NAMES)
-	case !func(mimeTypes []string) bool {
-		valid := true
+	case !utils.Reduce(mimeTypes, true, func(valid bool, mimeType string, i int, mimeTypes []string) bool {
+		splitted := strings.Split(mimeType, " ")
 
-		for _, mimeType := range mimeTypes {
-			splitted := strings.Split(mimeType, " ")
-
-			regex, err := regexp.Compile("^[0-9A-Za-z]{1,10}$")
-			if err != nil {
-				valid = valid && false
-			}
-
-			valid = valid && regex.MatchString(splitted[0])
+		regex, err := regexp.Compile("^[0-9A-Za-z]{1,10}$")
+		if err != nil {
+			return valid && false
 		}
-		return valid
-	}(mimeTypes):
+
+		return valid && regex.MatchString(splitted[0])
+	}):
 		return errors.New(INVALID_FILE_EXTENSION)
-	case !func(mimeTypes []string) bool {
-		valid := true
+	case !utils.Reduce(mimeTypes, true, func(valid bool, mimeType string, i int, mimeTypes []string) bool {
+		splitted := strings.Split(mimeType, " ")
 
-		for _, mimeType := range mimeTypes {
-			splitted := strings.Split(mimeType, " ")
-
-			regex, err := regexp.Compile(`^[\+\-\.\/0-9A-Za-z]{1,49}$`)
-			if err != nil {
-				valid = valid && false
-			}
-
-			valid = valid && regex.MatchString(splitted[1])
+		regex, err := regexp.Compile(`^[\+\-\.\/0-9A-Za-z]{1,49}$`)
+		if err != nil {
+			return valid && false
 		}
-		return valid
-	}(mimeTypes):
+
+		return valid && regex.MatchString(splitted[1])
+	}):
 		return errors.New(INVALID_MIME_TYPE)
-	case !func(fileNames []string) bool {
-		valid := true
-
-		for _, fileName := range fileNames {
-			regex, err := regexp.Compile(`^[\.0-9A-Za-z]{1,256}$`)
-			if err != nil {
-				return false
-			}
-
-			valid = valid && regex.MatchString(fileName)
+	case !utils.Reduce(fileNames, true, func(valid bool, fileName string, i int, fileNames []string) bool {
+		regex, err := regexp.Compile(`^[\.0-9A-Za-z]{1,256}$`)
+		if err != nil {
+			return valid && false
 		}
 
-		return valid
-	}(fileNames):
+		return valid && regex.MatchString(fileName)
+	}):
 		return errors.New(INVALID_FILE_NAME)
 	default:
 		return nil
