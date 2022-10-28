@@ -46,7 +46,7 @@ import (
 
 const (
 	OUT_OF_RANGE_MESSAGE = "the length of input 'message' should be between 1 and 1023"
-	OUT_OF_RANGE_N       = "the length of input 'N' should be between -10 and 10"
+	OUT_OF_RANGE_N       = "the value of input 'N' should be between -10 and 10"
 )
 
 type TStep struct {

@@ -63,7 +63,7 @@ import (
 
 const (
 	INVALID_ROWS   = "the length of input 'rows' should equal to the input 'h'"
-	OUT_OF_RANGE_H = "the length of input 'h' should be less than 200"
+	OUT_OF_RANGE_H = "the value of input 'h' should be less than 200"
 )
 
 func isValid(h int, rows []string) error {
