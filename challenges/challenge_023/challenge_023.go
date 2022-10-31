@@ -251,33 +251,6 @@ func decimalToDecimary(decimal int) string {
 	return decimary
 }
 
-// const decimalToDecimary = (decimal: number) => {
-// 	if (!decimal.toString().includes("0")) return decimal.toString();
-
-// 	let decimary = "";
-
-// 	let remainder = decimal;
-// 	while (remainder) {
-// 	  const splitted = remainder.toString().split("");
-// 	  const lastIndex = splitted.length - 1;
-// 	  const lastDigit = splitted[lastIndex];
-
-// 	  if (lastDigit !== "0") {
-// 		decimary = `${lastDigit}${decimary}`;
-// 		splitted.splice(lastIndex, 1);
-
-// 		remainder = splitted.length ? parseInt(splitted.join("")) : 0;
-// 	  } else {
-// 		decimary = `A${decimary}`;
-// 		splitted.splice(lastIndex, 1);
-
-// 		remainder = splitted.length ? parseInt(splitted.join("")) - 1 : 0;
-// 	  }
-// 	}
-
-// 	return decimary;
-//   };
-
 func Solution(count int, decimaryInputs string) (string, error) {
 	err := isValid(count, decimaryInputs)
 	if err != nil {
