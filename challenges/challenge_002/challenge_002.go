@@ -51,8 +51,6 @@ const (
 	INVALID_INPUT_RANGE     = "the input 'board' should contain only numbers between 1 to 9"
 )
 
-const boardSideLength = 9
-
 func isValid(board [][]int) error {
 	checkValidDimension := func(board [][]int, expectedXLength, expectedYLength int) bool {
 		validXLength := utils.Reduce(board, true, func(valid bool, row []int, i int, board [][]int) bool {
@@ -81,7 +79,7 @@ func isValid(board [][]int) error {
 	}
 
 	switch {
-	case !checkValidDimension(board, boardSideLength, boardSideLength):
+	case !checkValidDimension(board, 9, 9):
 		return errors.New(INVALID_INPUT_DIMENSION)
 	case !checkValidRange(board, 1, 9):
 		return errors.New(INVALID_INPUT_RANGE)
@@ -116,14 +114,14 @@ func transpose(matrix [][]int) [][]int {
 }
 
 // transform 9x9 board to 3x3 board represented by each row of the transformation result
-func transform(board [][]int, boardSideLength, sideLength int) [][]int {
+func transform(board [][]int) [][]int {
 	transformed := make([][]int, len(board))
 
-	for i := 0; i < boardSideLength/sideLength; i++ {
+	for i := 0; i < 3; i++ {
 		sliced := board[3*i : 3+3*i]
 		transposed := transpose(sliced)
 
-		for j := 0; j < boardSideLength/sideLength; j++ {
+		for j := 0; j < 3; j++ {
 			sliced := transposed[3*j : 3+3*j]
 			// reduced is the 3x3 board
 			reduced := utils.Reduce(sliced, []int{}, func(reduced []int, numbers []int, i int, sliced [][]int) []int {
@@ -153,7 +151,7 @@ func Solution(board [][]int) (string, error) {
 		return duplicationInColumn || checkDuplication(column)
 	})
 
-	duplicationInSmallBoard := utils.Reduce(transform(board, boardSideLength, 3), false, func(duplicationInSmallBoard bool, smallBoard []int, i int, transformedBoard [][]int) bool {
+	duplicationInSmallBoard := utils.Reduce(transform(board), false, func(duplicationInSmallBoard bool, smallBoard []int, i int, transformedBoard [][]int) bool {
 		return duplicationInSmallBoard || checkDuplication(smallBoard)
 	})
 
