@@ -41,7 +41,7 @@ func TestChallenge_001(t *testing.T) {
 	}{
 		{
 			input: input{s: "0000000012312313123"},
-			err:   errors.New(challenge.ALPHABET_NOT_FOUND),
+			err:   errors.New(challenge.INVALID_S),
 		},
 		{
 			input: input{s: "zvchW39Kt5mQQLXXE8IekkBAVOjwRVaKaHGwSI44uuJ005n1luXnfwW8pBW7S1ujXdrintWaZ7nK6dBsjch4BRPYazB2kdcAgfZak"},

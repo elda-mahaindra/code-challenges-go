@@ -30,8 +30,8 @@ import (
 )
 
 const (
-	ALPHABET_NOT_FOUND string = "the string input 's' should contain at least one alphabet letter"
-	OUT_OF_RANGE_S     string = "the length of input 's' should be between 1 and 100"
+	INVALID_S      string = "the string input 's' should contain at least one alphabet letter"
+	OUT_OF_RANGE_S string = "the length of input 's' should be between 1 and 100"
 )
 
 type status struct {
@@ -56,7 +56,7 @@ func isValid(s string) error {
 
 		return valid
 	}):
-		return errors.New(ALPHABET_NOT_FOUND)
+		return errors.New(INVALID_S)
 	default:
 		return nil
 	}
