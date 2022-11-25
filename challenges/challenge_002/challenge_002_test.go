@@ -65,7 +65,7 @@ func TestChallenge_002(t *testing.T) {
 				{3, 1, 7, 4, 8, 2, 9},
 				{1, 3, 6, 7, 4, 8, 5},
 			}},
-			err: errors.New(challenge.INVALID_INPUT_DIMENSION),
+			err: errors.New(challenge.INVALID_BOARD_DIMENSION),
 		},
 		{
 			input: input{board: [][]int{
@@ -79,7 +79,7 @@ func TestChallenge_002(t *testing.T) {
 				{0, 7, 4, 2, 1, 5, 6, 3, 8},
 				{5, 2, 8, 6, 3, 0, 4, 1, 7},
 			}},
-			err: errors.New(challenge.INVALID_INPUT_RANGE),
+			err: errors.New(challenge.OUT_OF_RANGE_BOARD_VALUE),
 		},
 	}
 

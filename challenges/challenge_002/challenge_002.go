@@ -47,8 +47,8 @@ import (
 )
 
 const (
-	INVALID_INPUT_DIMENSION = "the input 'board' should be a 9 x 9 sudoku board"
-	INVALID_INPUT_RANGE     = "the input 'board' should contain only numbers between 1 to 9"
+	INVALID_BOARD_DIMENSION  = "the input 'board' should be a 9 x 9 sudoku board"
+	OUT_OF_RANGE_BOARD_VALUE = "the input 'board' should contain only numbers between 1 to 9"
 )
 
 func isValid(board [][]int) error {
@@ -80,9 +80,9 @@ func isValid(board [][]int) error {
 
 	switch {
 	case !checkValidDimension(board, 9, 9):
-		return errors.New(INVALID_INPUT_DIMENSION)
+		return errors.New(INVALID_BOARD_DIMENSION)
 	case !checkValidRange(board, 1, 9):
-		return errors.New(INVALID_INPUT_RANGE)
+		return errors.New(OUT_OF_RANGE_BOARD_VALUE)
 	default:
 		return nil
 	}
