@@ -200,6 +200,8 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 					} else {
 						distanceYLeft += 1
 					}
+
+					distanceXLeft -= 1
 				}
 			}
 		case distanceXLeft < 0:
@@ -233,6 +235,8 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 					} else {
 						distanceYLeft += 1
 					}
+
+					distanceXLeft += 1
 				}
 			}
 		case distanceYLeft > 0:
@@ -266,6 +270,8 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 					} else {
 						distanceXLeft += 1
 					}
+
+					distanceYLeft -= 1
 				}
 			}
 		default:
@@ -299,6 +305,8 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 					} else {
 						distanceXLeft += 1
 					}
+
+					distanceYLeft += 1
 				}
 			}
 		}

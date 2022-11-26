@@ -39,11 +39,11 @@ func TestChallenge_004(t *testing.T) {
 		},
 		{
 			input:  input{lightX: 0, lightY: 17, initialTx: 31, initialTy: 4},
-			output: "SW SW SW SW SW SW SW SW SW SW SW SW SW W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+			output: "SW SW SW SW SW SW SW SW SW SW SW SW SW W W W W W W W W W W W W W W W W W W",
 		},
 		{
 			input:  input{lightX: 36, lightY: 17, initialTx: 0, initialTy: 0},
-			output: "SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E E",
+			output: "SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE SE E E E E E E E E E E E E E E E E E E E",
 		},
 	}
 
