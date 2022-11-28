@@ -88,6 +88,21 @@ var rows = []string{
 	"# # ##   ## ##  ### #    ## # # ###  #  # # ### # # # #  #  #     # # # ##   #  ###  #  # # # #  #  ###  #  ",
 }
 
+const charsAvailable = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?"
+const totalCharsAvailable = len(charsAvailable)
+
+var reducedRows = utils.Reduce(rows, [][]string{}, func(reducedRows [][]string, row string, i int, rows []string) [][]string {
+	reducedRow := []string{}
+
+	for i := 0; i < totalCharsAvailable; i++ {
+		sliced := row[i*L : i*L+L]
+
+		reducedRow = append(reducedRow, sliced)
+	}
+
+	return append(reducedRows, reducedRow)
+})
+
 func isValid(T string) error {
 	switch {
 	case len(T) <= 0 || len(T) >= 200:
@@ -108,8 +123,6 @@ func Solution(T string) ([]string, error) {
 		return nil, err
 	}
 
-	charsAvailable := "ABCDEFGHIJKLMNOPQRSTUVWXYZ?"
-	totalCharsAvailable := len(charsAvailable)
 	inputs := func(T string) []string {
 		upperCased := strings.ToUpper(T)
 		splitted := strings.Split(upperCased, "")
@@ -124,18 +137,6 @@ func Solution(T string) ([]string, error) {
 
 		return mapped
 	}(T)
-
-	reducedRows := utils.Reduce(rows, [][]string{}, func(reducedRows [][]string, row string, i int, rows []string) [][]string {
-		reducedRow := []string{}
-
-		for i := 0; i < totalCharsAvailable; i++ {
-			sliced := row[i*L : i*L+L]
-
-			reducedRow = append(reducedRow, sliced)
-		}
-
-		return append(reducedRows, reducedRow)
-	})
 
 	tIndexes := utils.Reduce(inputs, []int{}, func(tIndexes []int, tChar string, i int, inputs []string) []int {
 		for i := 0; i < len(charsAvailable); i++ {
