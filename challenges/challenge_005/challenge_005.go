@@ -138,16 +138,17 @@ func Solution(T string) ([]string, error) {
 		return mapped
 	}(T)
 
-	tIndexes := utils.Reduce(inputs, []int{}, func(tIndexes []int, tChar string, i int, inputs []string) []int {
+	tIndexes := utils.Map(inputs, func(tChar string, i int, inputs []string) int {
+		indexFound := -1
 		for i := 0; i < len(charsAvailable); i++ {
 			char := string([]rune(charsAvailable)[i])
 
 			if char == tChar {
-				tIndexes = append(tIndexes, i)
+				indexFound = i
 			}
 		}
 
-		return tIndexes
+		return indexFound
 	})
 
 	result := []string{}
