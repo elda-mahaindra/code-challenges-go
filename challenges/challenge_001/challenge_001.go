@@ -34,7 +34,7 @@ const (
 	OUT_OF_RANGE_S string = "the length of input 's' should be between 1 and 100"
 )
 
-type status struct {
+type TStatus struct {
 	char      string
 	occurence int32
 }
@@ -76,13 +76,13 @@ func Solution(s string) (string, error) {
 		return "", err
 	}
 
-	statuses := utils.Reduce(splitted, []status{}, func(statuses []status, v string, i int, splitted []string) []status {
+	statuses := utils.Reduce(splitted, []TStatus{}, func(statuses []TStatus, v string, i int, splitted []string) []TStatus {
 		if !regex.MatchString(splitted[i]) {
 			return statuses
 		}
 
 		if len(statuses) == 0 {
-			return append(statuses, status{
+			return append(statuses, TStatus{
 				char:      splitted[i],
 				occurence: 1,
 			})
@@ -90,12 +90,12 @@ func Solution(s string) (string, error) {
 			latest := statuses[len(statuses)-1]
 			if splitted[i] == latest.char {
 				statuses = statuses[0 : len(statuses)-1]
-				return append(statuses, status{
+				return append(statuses, TStatus{
 					char:      splitted[i],
 					occurence: latest.occurence + 1,
 				})
 			} else {
-				return append(statuses, status{
+				return append(statuses, TStatus{
 					char:      splitted[i],
 					occurence: 1,
 				})

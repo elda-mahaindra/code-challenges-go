@@ -66,7 +66,7 @@ const (
 	INVALID_BINARY       = "expecting a binary string which each value represented by '0' or '1'"
 )
 
-type status struct {
+type TStatus struct {
 	char      string
 	occurence int
 }
@@ -107,15 +107,15 @@ func binaryToUnary(binary string) (string, error) {
 
 	splitted := strings.Split(binary, "")
 
-	statuses := utils.Reduce(splitted, []status{}, func(reduced []status, char string, i int, splitted []string) []status {
+	statuses := utils.Reduce(splitted, []TStatus{}, func(reduced []TStatus, char string, i int, splitted []string) []TStatus {
 		if i == 0 {
-			return []status{{char: char, occurence: 1}}
+			return []TStatus{{char: char, occurence: 1}}
 		} else if char != reduced[len(reduced)-1].char {
-			return append(reduced, status{char: char, occurence: 1})
+			return append(reduced, TStatus{char: char, occurence: 1})
 		} else {
-			return utils.Map(reduced, func(stat status, i int, statuses []status) status {
+			return utils.Map(reduced, func(stat TStatus, i int, statuses []TStatus) TStatus {
 				if i == len(reduced)-1 {
-					return status{char: stat.char, occurence: stat.occurence + 1}
+					return TStatus{char: stat.char, occurence: stat.occurence + 1}
 				}
 
 				return stat
@@ -123,7 +123,7 @@ func binaryToUnary(binary string) (string, error) {
 		}
 	})
 
-	unary := utils.Reduce(statuses, "", func(reduced string, stat status, i int, statuses []status) string {
+	unary := utils.Reduce(statuses, "", func(reduced string, stat TStatus, i int, statuses []TStatus) string {
 		result := reduced
 
 		if i != 0 {

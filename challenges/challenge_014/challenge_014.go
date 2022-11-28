@@ -67,12 +67,12 @@ const (
 	OUT_OF_RANGE_WORD    = "each string inside the input 'dictionary' should have maximum of 30 characters length"
 )
 
-type scrabblePoint struct {
+type TScrabblePoint struct {
 	point   int
 	letters string
 }
 
-var scrabblePoints = []scrabblePoint{
+var scrabblePoints = []TScrabblePoint{
 	{point: 1, letters: "eaionrtlsu"},
 	{point: 2, letters: "dg"},
 	{point: 3, letters: "bcmp"},

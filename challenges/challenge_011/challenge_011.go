@@ -54,7 +54,7 @@ const (
 	OUT_OF_RANGE_MIME_TYPES = "the length of input 'mimeTypes' should be between 1 and 9999"
 )
 
-type mimeInfo struct {
+type TMimeInfo struct {
 	extension, mimeType string
 }
 
@@ -106,10 +106,10 @@ func Solution(mimeTypes, fileNames []string) ([]string, error) {
 		return nil, err
 	}
 
-	mimeTable := utils.Map(mimeTypes, func(mimeType string, i int, mimeTypes []string) mimeInfo {
+	mimeTable := utils.Map(mimeTypes, func(mimeType string, i int, mimeTypes []string) TMimeInfo {
 		splitted := strings.Split(mimeType, " ")
 
-		return mimeInfo{extension: splitted[0], mimeType: splitted[1]}
+		return TMimeInfo{extension: splitted[0], mimeType: splitted[1]}
 	})
 
 	result := utils.Map(fileNames, func(fileName string, i int, filenames []string) string {
@@ -122,14 +122,14 @@ func Solution(mimeTypes, fileNames []string) ([]string, error) {
 			splitted := strings.Split(fileName, ".")
 			extension := splitted[len(splitted)-1]
 
-			mimeInfoFound, found := func(mimeTable []mimeInfo) (mimeInfo, bool) {
+			mimeInfoFound, found := func(mimeTable []TMimeInfo) (TMimeInfo, bool) {
 				for _, mimeInfo := range mimeTable {
 					if strings.EqualFold(strings.ToLower(mimeInfo.extension), strings.ToLower(extension)) {
 						return mimeInfo, true
 					}
 				}
 
-				return mimeInfo{}, false
+				return TMimeInfo{}, false
 			}(mimeTable)
 
 			if found {

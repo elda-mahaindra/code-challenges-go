@@ -76,19 +76,19 @@ const (
 	OUT_OF_RANGE_N       = "the value of input 'N' should be between 2 and 1024"
 )
 
-type signOption struct {
+type TSignOption struct {
 	sign      string
 	winningTo [2]string
 	losingTo  [2]string
 }
 
-type player struct {
+type TPlayer struct {
 	playerNumber int
-	signOption   signOption
+	signOption   TSignOption
 	winRecords   []int
 }
 
-var signOptions = []signOption{
+var signOptions = []TSignOption{
 	{sign: "R", winningTo: [2]string{"L", "C"}, losingTo: [2]string{"P", "S"}},
 	{sign: "P", winningTo: [2]string{"R", "S"}, losingTo: [2]string{"C", "L"}},
 	{sign: "C", winningTo: [2]string{"P", "L"}, losingTo: [2]string{"R", "S"}},
@@ -167,18 +167,18 @@ func Solution(N int, playerSigns []string) (string, error) {
 		return "", err
 	}
 
-	players := utils.Map(playerSigns, func(playerSign string, i int, playerSigns []string) player {
+	players := utils.Map(playerSigns, func(playerSign string, i int, playerSigns []string) TPlayer {
 		splitted := strings.Split(playerSign, " ")
 		sign := splitted[1]
 		playerNumber, err := strconv.Atoi(splitted[0])
 		if err != nil {
-			return player{}
+			return TPlayer{}
 		}
 
-		player := player{
+		player := TPlayer{
 			playerNumber: playerNumber,
-			signOption: func(signOptions []signOption) signOption {
-				found := signOption{}
+			signOption: func(signOptions []TSignOption) TSignOption {
+				found := TSignOption{}
 
 				for _, signOption := range signOptions {
 					if signOption.sign == sign {
@@ -195,7 +195,7 @@ func Solution(N int, playerSigns []string) (string, error) {
 	})
 
 	for len(players) > 1 {
-		winners := []player{}
+		winners := []TPlayer{}
 
 		for i := 0; i < len(players); i += 2 {
 			playerOne := players[i]
@@ -217,7 +217,7 @@ func Solution(N int, playerSigns []string) (string, error) {
 			switch {
 			case playerOneLosing:
 				{
-					winners = append(winners, player{
+					winners = append(winners, TPlayer{
 						playerNumber: playerTwoNumber,
 						signOption:   playerTwoSignOption,
 						winRecords:   append(playerTwoWinRecords, playerOneNumber),
@@ -225,7 +225,7 @@ func Solution(N int, playerSigns []string) (string, error) {
 				}
 			case playerOneWinning:
 				{
-					winners = append(winners, player{
+					winners = append(winners, TPlayer{
 						playerNumber: playerOneNumber,
 						signOption:   playerOneSignOption,
 						winRecords:   append(playerOneWinRecords, playerTwoNumber),
@@ -233,7 +233,7 @@ func Solution(N int, playerSigns []string) (string, error) {
 				}
 			case playerOneNumber > playerTwoNumber:
 				{
-					winners = append(winners, player{
+					winners = append(winners, TPlayer{
 						playerNumber: playerTwoNumber,
 						signOption:   playerTwoSignOption,
 						winRecords:   append(playerTwoWinRecords, playerOneNumber),
@@ -241,7 +241,7 @@ func Solution(N int, playerSigns []string) (string, error) {
 				}
 			default:
 				{
-					winners = append(winners, player{
+					winners = append(winners, TPlayer{
 						playerNumber: playerOneNumber,
 						signOption:   playerOneSignOption,
 						winRecords:   append(playerOneWinRecords, playerTwoNumber),

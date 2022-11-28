@@ -85,7 +85,7 @@ const (
 	INVALID_FOREST = "the value of input 'forest' should be an array of strings which represents the 6 x 6 grid forest an contain either '#', '=', 'o', or '*'"
 )
 
-type firePoint struct {
+type TFirePoint struct {
 	x, y int
 }
 
@@ -113,12 +113,12 @@ func Solution(forest []string) (string, error) {
 	}
 
 	removedTress := 0
-	firePoints := []firePoint{}
+	firePoints := []TFirePoint{}
 
 	for j := 0; j < 6; j++ {
 		for i := 0; i < 6; i++ {
 			if string([]rune(forest[j])[i]) == "*" {
-				firePoints = append(firePoints, firePoint{x: i, y: j})
+				firePoints = append(firePoints, TFirePoint{x: i, y: j})
 			}
 		}
 	}
@@ -134,7 +134,7 @@ func Solution(forest []string) (string, error) {
 
 		for i := 0; i < 6; i++ {
 			if string([]rune(forest[j])[i]) == "#" {
-				fires := utils.Filter(firePoints, func(point firePoint) bool {
+				fires := utils.Filter(firePoints, func(point TFirePoint) bool {
 					x := point.x
 					y := point.y
 

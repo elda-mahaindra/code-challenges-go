@@ -50,13 +50,13 @@ const (
 	OUT_OF_RANGE_INITIAL_TY = "the value of input 'initialTx' should be between 0 and 17"
 )
 
-type moveDirection struct {
+type TMoveDirection struct {
 	move   string
 	shiftX int
 	shiftY int
 }
 
-var moveDirections = [8]moveDirection{
+var moveDirections = [8]TMoveDirection{
 	{move: "N", shiftX: 0, shiftY: -1},
 	{move: "NE", shiftX: 1, shiftY: -1},
 	{move: "E", shiftX: 1, shiftY: 0},
@@ -101,9 +101,9 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 					return strings.TrimSpace(moves), nil
 				}
 
-				found, moveDir := func(moveDirections [8]moveDirection) (bool, moveDirection) {
+				found, moveDir := func(moveDirections [8]TMoveDirection) (bool, TMoveDirection) {
 					found := false
-					moveDir := moveDirection{}
+					moveDir := TMoveDirection{}
 
 					for _, md := range moveDirections {
 						if distanceYLeft > 0 {
@@ -138,9 +138,9 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 					return strings.TrimSpace(moves), nil
 				}
 
-				found, moveDir := func(moveDirections [8]moveDirection) (bool, moveDirection) {
+				found, moveDir := func(moveDirections [8]TMoveDirection) (bool, TMoveDirection) {
 					found := false
-					moveDir := moveDirection{}
+					moveDir := TMoveDirection{}
 
 					for _, md := range moveDirections {
 						if distanceXLeft > 0 {
@@ -171,9 +171,9 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 			}
 		case distanceXLeft > 0:
 			{
-				found, moveDir := func(moveDirections [8]moveDirection) (bool, moveDirection) {
+				found, moveDir := func(moveDirections [8]TMoveDirection) (bool, TMoveDirection) {
 					found := false
-					moveDir := moveDirection{}
+					moveDir := TMoveDirection{}
 
 					for _, md := range moveDirections {
 						if distanceYLeft > 0 {
@@ -206,9 +206,9 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 			}
 		case distanceXLeft < 0:
 			{
-				found, moveDir := func(moveDirections [8]moveDirection) (bool, moveDirection) {
+				found, moveDir := func(moveDirections [8]TMoveDirection) (bool, TMoveDirection) {
 					found := false
-					moveDir := moveDirection{}
+					moveDir := TMoveDirection{}
 
 					for _, md := range moveDirections {
 						if distanceYLeft > 0 {
@@ -241,9 +241,9 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 			}
 		case distanceYLeft > 0:
 			{
-				found, moveDir := func(moveDirections [8]moveDirection) (bool, moveDirection) {
+				found, moveDir := func(moveDirections [8]TMoveDirection) (bool, TMoveDirection) {
 					found := false
-					moveDir := moveDirection{}
+					moveDir := TMoveDirection{}
 
 					for _, md := range moveDirections {
 						if distanceXLeft > 0 {
@@ -276,9 +276,9 @@ func Solution(lightX, lightY, initialTx, initialTy int) (string, error) {
 			}
 		default:
 			{
-				found, moveDir := func(moveDirections [8]moveDirection) (bool, moveDirection) {
+				found, moveDir := func(moveDirections [8]TMoveDirection) (bool, TMoveDirection) {
 					found := false
-					moveDir := moveDirection{}
+					moveDir := TMoveDirection{}
 
 					for _, md := range moveDirections {
 						if distanceXLeft > 0 {

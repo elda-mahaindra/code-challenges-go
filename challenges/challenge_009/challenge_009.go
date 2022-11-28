@@ -62,7 +62,7 @@ const (
 	OUT_OF_RANGE_W = "the value of input 'w' should be between 1 and 30"
 )
 
-type minePoint struct {
+type TMinePoint struct {
 	x, y int
 }
 
@@ -95,12 +95,12 @@ func Solution(w, h int, lines []string) ([]string, error) {
 		return nil, err
 	}
 
-	minePoints := []minePoint{}
+	minePoints := []TMinePoint{}
 
 	for j := 0; j < h; j++ {
 		for i := 0; i < w; i++ {
 			if string([]rune(lines[j])[i]) == "x" {
-				minePoints = append(minePoints, minePoint{x: i, y: j})
+				minePoints = append(minePoints, TMinePoint{x: i, y: j})
 			}
 		}
 	}
@@ -114,7 +114,7 @@ func Solution(w, h int, lines []string) ([]string, error) {
 			if resultContents[i] == "x" {
 				resultContents[i] = "."
 			} else {
-				filtered := utils.Filter(minePoints, func(point minePoint) bool {
+				filtered := utils.Filter(minePoints, func(point TMinePoint) bool {
 					x := point.x
 					y := point.y
 

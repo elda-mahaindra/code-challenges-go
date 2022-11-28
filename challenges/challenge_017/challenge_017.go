@@ -68,7 +68,7 @@ const (
 	OUT_OF_RANGE_W       = "the value of input 'W' should be between 1 and input 'H'"
 )
 
-type tAsteroid struct {
+type TAsteroid struct {
 	name              string
 	positions         [3][2]float64 // represents x and y position at t1, t2, and t3
 	movementPerSecond [2]float64    // represents movement on x axis and y axis per second
@@ -142,12 +142,12 @@ func Solution(W, H int, t1, t2, t3 float64, pictureRows []string) ([]string, err
 	pic1 := pics[0]
 	pic2 := pics[1]
 
-	asteroids := []tAsteroid{}
+	asteroids := []TAsteroid{}
 	for y := 0; y < H; y++ {
 		for x := 0; x < W; x++ {
 			content := string([]rune(pic1[y])[x])
 			if content != "." {
-				asteroids = append(asteroids, tAsteroid{
+				asteroids = append(asteroids, TAsteroid{
 					name: content,
 					positions: [3][2]float64{
 						{float64(x), float64(y)},
@@ -171,9 +171,9 @@ func Solution(W, H int, t1, t2, t3 float64, pictureRows []string) ([]string, err
 					}
 				}
 
-				asteroids = utils.Map(asteroids, func(asteroid tAsteroid, i int, asteroids []tAsteroid) tAsteroid {
+				asteroids = utils.Map(asteroids, func(asteroid TAsteroid, i int, asteroids []TAsteroid) TAsteroid {
 					if i == index {
-						return tAsteroid{
+						return TAsteroid{
 							name: asteroid.name,
 							positions: [3][2]float64{
 								{asteroid.positions[0][0], asteroid.positions[0][1]},
@@ -193,7 +193,7 @@ func Solution(W, H int, t1, t2, t3 float64, pictureRows []string) ([]string, err
 		}
 	}
 
-	asteroids = utils.Map(asteroids, func(asteroid tAsteroid, i int, asteroids []tAsteroid) tAsteroid {
+	asteroids = utils.Map(asteroids, func(asteroid TAsteroid, i int, asteroids []TAsteroid) TAsteroid {
 		movementX := asteroid.movementPerSecond[0]
 		movementY := asteroid.movementPerSecond[1]
 
@@ -205,7 +205,7 @@ func Solution(W, H int, t1, t2, t3 float64, pictureRows []string) ([]string, err
 			pos2[1] + math.Floor(movementY*(t3-t2)),
 		}
 
-		return tAsteroid{
+		return TAsteroid{
 			name: asteroid.name,
 			positions: [3][2]float64{
 				{positions[0][0], positions[0][1]},
@@ -224,7 +224,7 @@ func Solution(W, H int, t1, t2, t3 float64, pictureRows []string) ([]string, err
 	picture3Board := generateEmptyPictureBoard(W, H)
 	for y, row := range picture3Board {
 		for x := range row {
-			found := tAsteroid{}
+			found := TAsteroid{}
 			for _, asteroid := range sorted {
 				if asteroid.positions[2][0] == float64(x) && asteroid.positions[2][1] == float64(y) {
 					found = asteroid
