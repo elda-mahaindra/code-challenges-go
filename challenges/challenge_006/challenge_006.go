@@ -89,7 +89,7 @@ func Solution(N int, inputs string) (int, error) {
 		return -274, nil
 	}
 
-	lowestTemps := utils.Reduce(temps, []int{}, func(lowestTemps []int, temp int, i int, temps []int) []int {
+	tempsClosestToZero := utils.Reduce(temps, []int{}, func(lowestTemps []int, temp int, i int, temps []int) []int {
 		if i == 0 {
 			return append(lowestTemps, temp)
 		}
@@ -108,9 +108,9 @@ func Solution(N int, inputs string) (int, error) {
 		return append(lowestTemps, temp)
 	})
 
-	sort.SliceStable(lowestTemps, func(i, j int) bool {
-		return lowestTemps[i] > lowestTemps[j]
+	sort.SliceStable(tempsClosestToZero, func(i, j int) bool {
+		return tempsClosestToZero[i] > tempsClosestToZero[j]
 	})
 
-	return lowestTemps[0], nil
+	return tempsClosestToZero[0], nil
 }
