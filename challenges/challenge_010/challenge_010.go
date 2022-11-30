@@ -112,7 +112,7 @@ func Solution(forest []string) (string, error) {
 		return "", err
 	}
 
-	removedTress := 0
+	removedTrees := 0
 	firePoints := []TFirePoint{}
 
 	for j := 0; j < 6; j++ {
@@ -143,7 +143,7 @@ func Solution(forest []string) (string, error) {
 
 				if len(fires) > 0 {
 					resultSquares[i] = "="
-					removedTress += 1
+					removedTrees += 1
 				}
 			}
 		}
@@ -160,7 +160,7 @@ func Solution(forest []string) (string, error) {
 	})
 
 	if anyTreesRemain {
-		return strconv.Itoa(removedTress), nil
+		return strconv.Itoa(removedTrees), nil
 	} else {
 		return "JUST RUN", nil
 	}
