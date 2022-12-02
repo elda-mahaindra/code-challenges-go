@@ -67,19 +67,19 @@ const (
 	OUT_OF_RANGE_WORD    = "each string inside the input 'dictionary' should have maximum of 30 characters length"
 )
 
-type TScrabblePoint struct {
-	point   int
+type TScrabbleScore struct {
+	score   int
 	letters string
 }
 
-var scrabblePoints = []TScrabblePoint{
-	{point: 1, letters: "eaionrtlsu"},
-	{point: 2, letters: "dg"},
-	{point: 3, letters: "bcmp"},
-	{point: 4, letters: "fhvwy"},
-	{point: 5, letters: "k"},
-	{point: 8, letters: "jx"},
-	{point: 10, letters: "qz"}}
+var scrabbleScores = []TScrabbleScore{
+	{score: 1, letters: "eaionrtlsu"},
+	{score: 2, letters: "dg"},
+	{score: 3, letters: "bcmp"},
+	{score: 4, letters: "fhvwy"},
+	{score: 5, letters: "k"},
+	{score: 8, letters: "jx"},
+	{score: 10, letters: "qz"}}
 
 func isValid(N int, dictionary []string, letters string) error {
 	switch {
@@ -98,14 +98,14 @@ func isValid(N int, dictionary []string, letters string) error {
 	}
 }
 
-func calculatePoint(letters, word string) int {
+func calculateScore(letters, word string, scrabbleScores []TScrabbleScore) int {
 	if len(word) > len(letters) {
 		return 0
 	}
 
 	remainingLetters := strings.Split(letters, "")
-	matchingChars := ""
-	totalPoint := 0
+	matchingLetters := ""
+	totalScore := 0
 
 	for i := 0; i < len(word); i++ {
 		indexFound := -1
@@ -117,27 +117,27 @@ func calculatePoint(letters, word string) int {
 		}
 
 		if indexFound >= 0 {
-			point := -1
-			for _, scrabblePoint := range scrabblePoints {
+			score := -1
+			for _, scrabblePoint := range scrabbleScores {
 				splitted := strings.Split(scrabblePoint.letters, "")
 				if utils.Includes(splitted, string([]rune(word)[i])) {
-					point = scrabblePoint.point
+					score = scrabblePoint.score
 				}
 			}
 
-			totalPoint += point
+			totalScore += score
 
 			// Remove the element at indexFound from remainingLetters.
 			copy(remainingLetters[indexFound:], remainingLetters[indexFound+1:]) // Shift remainingLetters[indexFound+1:] left one index.
 			remainingLetters[len(remainingLetters)-1] = ""                       // Erase last element (write zero value).
 			remainingLetters = remainingLetters[:len(remainingLetters)-1]        // Truncate slice.
 
-			matchingChars += string([]rune(word)[i])
+			matchingLetters += string([]rune(word)[i])
 		}
 	}
 
-	if matchingChars == word {
-		return totalPoint
+	if matchingLetters == word {
+		return totalScore
 	}
 
 	return 0
@@ -149,27 +149,27 @@ func Solution(N int, dictionary []string, letters string) (string, error) {
 		return "", err
 	}
 
-	highestPointHolder := struct {
+	highestScoreHolder := struct {
 		word  string
-		point int
+		score int
 	}{
 		word:  "",
-		point: 0,
+		score: 0,
 	}
 
 	for _, word := range dictionary {
-		point := calculatePoint(letters, word)
+		score := calculateScore(letters, word, scrabbleScores)
 
-		if point > highestPointHolder.point {
-			highestPointHolder = struct {
+		if score > highestScoreHolder.score {
+			highestScoreHolder = struct {
 				word  string
-				point int
+				score int
 			}{
 				word:  word,
-				point: point,
+				score: score,
 			}
 		}
 	}
 
-	return highestPointHolder.word, nil
+	return highestScoreHolder.word, nil
 }
