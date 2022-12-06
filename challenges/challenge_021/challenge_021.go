@@ -87,12 +87,12 @@ func Solution(n int, rows []string, message string) (string, error) {
 		return "", err
 	}
 
-	charMaps := utils.Reduce(rows, []TCharMap{}, func(charMaps []TCharMap, row string, x int, rows []string) []TCharMap {
+	charMaps := utils.Reduce(rows, []TCharMap{}, func(charMaps []TCharMap, row string, y int, rows []string) []TCharMap {
 		splitted := strings.Split(row, " ")
 
 		maps := []TCharMap{}
-		for y := 0; y < len(splitted); y++ {
-			maps = append(maps, TCharMap{char: splitted[y], position: []int{x, y}})
+		for x := 0; x < len(splitted); x++ {
+			maps = append(maps, TCharMap{char: splitted[x], position: []int{x, y}})
 		}
 
 		return append(charMaps, maps...)
@@ -109,7 +109,7 @@ func Solution(n int, rows []string, message string) (string, error) {
 		x := found.position[0]
 		y := found.position[1]
 
-		return fmt.Sprintf("%d%d", x, y)
+		return fmt.Sprintf("%d%d", y, x)
 	}), "")
 
 	return encoded, nil
