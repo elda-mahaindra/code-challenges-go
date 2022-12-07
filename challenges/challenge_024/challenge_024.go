@@ -61,7 +61,7 @@ const (
 
 type TCell struct {
 	op, arg1, arg2 string
-	counted        bool
+	calculated     bool
 	value          int
 }
 
@@ -76,7 +76,7 @@ func isValid(N int, operations []string) error {
 	}
 }
 
-func count(operationType string, arg1, arg2 int) int {
+func calculate(operationType string, arg1, arg2 int) int {
 	switch operationType {
 	case "VALUE":
 		{
@@ -98,9 +98,9 @@ func count(operationType string, arg1, arg2 int) int {
 	}
 }
 
-func checkCounted(cells []TCell) bool {
-	return utils.Reduce(cells, true, func(allCounted bool, cell TCell, i int, cells []TCell) bool {
-		return allCounted && cell.counted
+func checkAllCalculated(cells []TCell) bool {
+	return utils.Reduce(cells, true, func(allCalculated bool, cell TCell, i int, cells []TCell) bool {
+		return allCalculated && cell.calculated
 	})
 }
 
@@ -116,7 +116,7 @@ func Solution(N int, operations []string) ([]int, error) {
 		arg1 := splitted[1]
 		arg2 := splitted[2]
 
-		counted := false
+		calculated := false
 		value := 0
 
 		if !strings.Contains(arg1, "$") && !strings.Contains(arg2, "$") {
@@ -135,29 +135,29 @@ func Solution(N int, operations []string) ([]int, error) {
 				intParsedArg2 = parsed
 			}
 
-			value = count(op, intParsedArg1, intParsedArg2)
-			counted = true
+			value = calculate(op, intParsedArg1, intParsedArg2)
+			calculated = true
 		}
 
 		return TCell{
-			op:      op,
-			arg1:    arg1,
-			arg2:    arg2,
-			counted: counted,
-			value:   value,
+			op:         op,
+			arg1:       arg1,
+			arg2:       arg2,
+			calculated: calculated,
+			value:      value,
 		}
 	})
 
-	allCounted := checkCounted(cells)
+	allCalculated := checkAllCalculated(cells)
 
-	for !allCounted {
+	for !allCalculated {
 		cells = utils.Map(cells, func(cell TCell, i int, cells []TCell) TCell {
 			op := cell.op
 			arg1 := cell.arg1
 			arg2 := cell.arg2
-			counted := cell.counted
+			calculated := cell.calculated
 
-			if !counted {
+			if !calculated {
 				intParsedArg1 := 0
 				intParsedArg2 := 0
 
@@ -168,7 +168,7 @@ func Solution(N int, operations []string) ([]int, error) {
 					}
 					cellRef1 := cells[intParsed]
 
-					if !cellRef1.counted {
+					if !cellRef1.calculated {
 						return cell
 					}
 
@@ -194,7 +194,7 @@ func Solution(N int, operations []string) ([]int, error) {
 					}
 					cellRef2 := cells[intParsed]
 
-					if !cellRef2.counted {
+					if !cellRef2.calculated {
 						return cell
 					}
 
@@ -214,18 +214,18 @@ func Solution(N int, operations []string) ([]int, error) {
 				}
 
 				return TCell{
-					op:      op,
-					arg1:    arg1,
-					arg2:    arg2,
-					counted: true,
-					value:   count(op, intParsedArg1, intParsedArg2),
+					op:         op,
+					arg1:       arg1,
+					arg2:       arg2,
+					calculated: true,
+					value:      calculate(op, intParsedArg1, intParsedArg2),
 				}
 			}
 
 			return cell
 		})
 
-		allCounted = checkCounted(cells)
+		allCalculated = checkAllCalculated(cells)
 	}
 
 	mapped := utils.Map(cells, func(cell TCell, i int, cells []TCell) int {
