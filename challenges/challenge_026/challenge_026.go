@@ -44,8 +44,8 @@ import (
 
 const (
 	INVALID_RAW_CHANGE        = "the length of input 'rawChanges' should equal to the input 'changeCount' and each change should be a valid change"
-	OUT_OF_RANGE_CHANGE_COUNT = "the length of input 'changeCount' should be between 1 and 10"
-	OUT_OF_RANGE_S            = "the length of input 's' should be more than 0"
+	OUT_OF_RANGE_CHANGE_COUNT = "the value of input 'changeCount' should be between 1 and 10"
+	OUT_OF_RANGE_S            = "the value of input 's' should be more than 0"
 )
 
 type TChange struct {
