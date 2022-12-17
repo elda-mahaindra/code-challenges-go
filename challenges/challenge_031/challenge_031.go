@@ -78,8 +78,6 @@ const (
 	OUT_OF_RANGE_RECIPE = "the length of input 'recipe' should be between 5 and 1000"
 )
 
-type TPosition = []int
-
 func isValid(recipe string) error {
 	switch {
 	case len(recipe) < 5 || len(recipe) > 1000:
