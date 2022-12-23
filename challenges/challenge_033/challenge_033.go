@@ -55,7 +55,7 @@ import (
 
 const (
 	INVALID_ARRAY_ASSIGNMENTS = "the length of input 'assignments' should be equal to input 'n' and each assignment should be a valid assignment according to the constraints"
-	INVALID_ELEMENT           = "the input 'element' should have at most 50 levels of nesting"
+	INVALID_ELEMENT           = "the input 'element' should be a valid index operation and have at most 50 levels of nesting"
 	OUT_OF_RANGE_N            = "the value of input 'n' should be between 1 and 100"
 )
 
